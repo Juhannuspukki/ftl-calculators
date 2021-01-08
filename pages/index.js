@@ -112,6 +112,7 @@ export default function Home() {
   const [selectedShipClass, setSelectedShipClass] = useState("Frigate (T4, T5)")
   const [debrisCount, setDebrisCount] = useState(1)
   const [debrisCost, setDebrisCost] = useState(0)
+  const [otherExpenses, setOtherExpenses] = useState(0)
   
   const maxDebris = shipData.find(ship => ship.name === selectedShipClass).maxDebris
   
@@ -138,7 +139,8 @@ export default function Home() {
     }
   }
   
-  const researchCost = (1 / (calculateSuccessChance() * 0.01)  * debrisCost * debrisCount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+  console.log(typeof debrisCost)
+  const researchCost = (1 / (calculateSuccessChance() * 0.01)  * (parseFloat(debrisCost) * debrisCount + parseFloat(otherExpenses))).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ")
   
   return (
     <main>
@@ -247,13 +249,13 @@ export default function Home() {
         </div>
         <h2>Results</h2>
         <div className={"row"}>
-          <div className={"col-md-6"}>
+          <div className={"col-6"}>
             <label>
               Chance of success
               <p className={"result-text"}>{Math.round(calculateSuccessChance())} %</p>
             </label>
           </div>
-          <div className={"col-md-6"}>
+          <div className={"col-6"}>
             <label>
               Bonus from skills
               <p className={"result-text"}>+ {successMultiplier} %</p>
@@ -262,7 +264,7 @@ export default function Home() {
         </div>
         <h2>Financial stuff</h2>
         <div className={"row"}>
-          <div className={"col-md-5"}>
+          <div className={"col-6"}>
             <label>
               Cost for 1 debris
               <input
@@ -271,6 +273,18 @@ export default function Home() {
                 max={maxDebris}
                 value={debrisCost}
                 onChange={event => setDebrisCost(event.target.value)}
+              />
+            </label>
+          </div>
+          <div className={"col-6"}>
+            <label>
+              Other expenses
+              <input
+                className={"number-input"}
+                type={"number"}
+                max={maxDebris}
+                value={otherExpenses}
+                onChange={event => setOtherExpenses(event.target.value)}
               />
             </label>
           </div>
